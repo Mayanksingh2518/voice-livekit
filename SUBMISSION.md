@@ -9,7 +9,7 @@ Opik through a single drop-in module.
 |---|---|
 | **Code** | this repository |
 | **Agent** | LiveKit Cloud, `ap-south` (`lk agent deploy`) |
-| **Console** | Render, free tier |
+| **Live console** | https://voice-livekit-m9hu.onrender.com |
 | **Traces** | Opik project `livekit-voice-agent` |
 
 ---
@@ -137,9 +137,10 @@ uv run python web/server.py                 # the console, on :8080
 - **Agent → LiveKit Cloud.** `lk agent create --secrets-file .env.agent`, then `lk agent deploy`
   for later versions. A `Dockerfile` and `.python-version` are in the repository; model weights are
   fetched at build time so the first call is not delayed.
-- **Console → Render.** Python 3, build `pip install .`, start `python web/server.py`, free
-  instance. Seven environment variables; the agent's speech stack is deliberately excluded so the
-  console stays inside a 512 MB instance.
+- **Console → Render.** Live at <https://voice-livekit-m9hu.onrender.com>. Python 3, build `pip install .`, start
+  `python web/server.py`, free instance. Seven environment variables; the agent's speech stack is
+  deliberately excluded so the console stays inside a 512 MB instance. The free tier sleeps after
+  15 minutes idle, so the first request after a pause takes up to a minute.
 
 ---
 

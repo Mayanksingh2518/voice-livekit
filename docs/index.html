@@ -143,7 +143,7 @@ ul.prose b{font-weight:600;color:var(--ink)}
   <div class="links">
     <a href="https://github.com/Mayanksingh2518/voice-livekit"><b>Code</b> github.com/Mayanksingh2518/voice-livekit</a>
     <span><b>Agent</b> LiveKit Cloud · ap-south</span>
-    <span><b>Console</b> Render · free tier</span>
+    <a href="https://voice-livekit-m9hu.onrender.com"><b>Live console</b> voice-livekit-m9hu.onrender.com</a>
     <span><b>Traces</b> Opik · livekit-voice-agent</span>
   </div>
 </header>
@@ -325,9 +325,11 @@ ul.prose b{font-weight:600;color:var(--ink)}
       <code>lk agent deploy</code> for later versions. A <code>Dockerfile</code> and
       <code>.python-version</code> are in the repository; model weights are fetched at build time
       so the first call is not delayed.</li>
-    <li><b>Console → Render.</b> Python 3, build <code>pip install .</code>, start
-      <code>python web/server.py</code>, free instance. Seven environment variables; the agent's
-      speech stack is deliberately excluded so the console stays inside a 512 MB instance.</li>
+    <li><b>Console → Render.</b> Live at <a href="https://voice-livekit-m9hu.onrender.com">voice-livekit-m9hu.onrender.com</a>.
+      Python 3, build <code>pip install .</code>, start <code>python web/server.py</code>, free
+      instance. Seven environment variables; the agent's speech stack is deliberately excluded so
+      the console stays inside a 512 MB instance. The free tier sleeps after 15 minutes idle, so
+      the first request after a pause takes up to a minute.</li>
   </ul>
 </section>
 
