@@ -22,7 +22,6 @@ agent = [
     "livekit-plugins-noise-cancellation~=0.2",
     "openai>=1.40",
 ]
-dashboard = ["streamlit>=1.40"]
 
 [dependency-groups]
 dev = ["pytest>=8.0", "pytest-asyncio>=0.23"]

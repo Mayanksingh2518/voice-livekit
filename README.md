@@ -8,6 +8,9 @@ results, analysis, evaluation scores — into [Opik](https://www.comet.com/docs/
 The Opik integration is a single drop-in module, `observability/opik_tracer.py`. It costs the core
 application exactly one line.
 
+**Live console:** <https://voice-livekit-m9hu.onrender.com> · **Writeup:** [SUBMISSION.md](SUBMISSION.md)
+(what was built, the constraints hit and why, and the production roadmap)
+
 ---
 
 ## Quick start — no phone number needed
@@ -61,16 +64,22 @@ uv run python scripts/replay_call.py
 This drives the Opik module with a fake session object and no LiveKit runtime, which is also the
 proof that the module is genuinely standalone.
 
-### Operator console
+### Web console
 
 ```bash
-uv run streamlit run dashboard.py
+uv run python web/server.py          # then open http://localhost:8080
 ```
 
-Place a call, then read the transcript, post-call analysis, tool calls and evaluation scores in one
-place. It reads call data **back out of Opik** rather than keeping its own copy — the traces are the
-system of record, so the console shows exactly what was logged and nothing is stored twice. Patients
-on the do-not-call list are visibly blocked from dialling.
+One page: pick a patient, start a call in the browser, watch the transcript stream, and read the
+post-call analysis when it lands. `/overview` explains the pipeline and the trace topology.
+
+The browser joins as a real LiveKit participant, so the agent, the tools, the recording and the
+Opik traces are all the production path — only the last mile is WebRTC instead of a phone line.
+Call data is read **back out of Opik** rather than cached here: the traces are the system of
+record. Patients on the do-not-call list are visibly blocked from dialling.
+
+**Use headphones.** On speakers the agent hears its own voice through the microphone, it gets
+transcribed as the patient, and it starts replying to itself.
 
 ---
 
@@ -106,7 +115,8 @@ main.py                                observability/opik_tracer.py
 | `analysis/post_call.py` | Post-call analysis and reconciliation |
 | `observability/opik_tracer.py` | **The Opik integration** (write side) |
 | `observability/opik_reader.py` | Reads calls back out of Opik for the console |
-| `dashboard.py` | Streamlit operator console |
+| `web/server.py`, `web/index.html` | Web console — start a call, live transcript, analysis |
+| `web/overview.html` | How the pipeline and the trace topology work |
 | `scripts/` | Dispatch a call, create the SIP trunk, create Opik rules, replay a call |
 
 ---
@@ -260,6 +270,29 @@ falls back to a URL reference; OGG is transcoded to WAV via ffmpeg when availabl
 playback in the Opik UI; `REDACT_PHI=true` masks phone numbers before anything leaves the process;
 a double shutdown cannot emit duplicate traces; `flush()` is bounded so a worker cannot hang on exit.
 
+## Deployment
+
+Two deployables, because they are different shapes. The agent is a long-lived worker holding a
+socket to LiveKit; the console is an ordinary HTTP service.
+
+| Piece | Where | How |
+|---|---|---|
+| Agent worker | LiveKit Cloud, `ap-south` | `lk agent create --secrets-file .env.agent`, then `lk agent deploy` |
+| Web console | Render, free instance | build `pip install .`, start `python web/server.py` |
+
+The repository carries a `Dockerfile` (model weights fetched at build time so the first call is not
+delayed) and a `.python-version` pin, since Render otherwise defaults to a Python with no wheels for
+parts of this stack.
+
+`pip install .` installs only what the console needs. The agent's speech stack lives behind the
+`agent` extra (`pip install ".[agent]"`, `uv sync --extra agent`), which keeps a console deploy
+inside a 512 MB instance.
+
+Free hosting cannot run the agent: Render's background workers are paid-only, Fly.io's free tier is
+gone for new accounts, Koyeb's free tier excludes worker services, and platforms that sleep on
+absent inbound traffic kill a worker whose connection is outbound. LiveKit Cloud's own agent
+hosting is purpose-built for this and has a free allowance.
+
 ## Testing
 
 ```bash
@@ -285,5 +318,5 @@ Deliberately not built, and worth naming rather than hiding:
 
 ## Stack
 
-`livekit-agents` 1.8.1 · `opik` 2.2.59 · Python 3.11 · Gemini (`gemini-flash-latest`) LLM ·
-Deepgram nova-3 STT · Deepgram Aura TTS · Silero VAD · LiveKit English turn detector
+`livekit-agents` 1.8.1 · `opik` 2.2.59 · Python 3.11 · Gemini LLM (switchable to OpenAI) ·
+Deepgram nova-3 STT · Deepgram Aura TTS · Silero VAD · LiveKit English turn detector · aiohttp console
