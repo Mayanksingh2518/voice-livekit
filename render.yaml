@@ -1,0 +1,27 @@
+# Render blueprint for the web console only. The agent worker runs on LiveKit Cloud
+# (`lk agent deploy`) — a persistent worker is not a web service and does not belong here.
+services:
+  - type: web
+    name: care-outreach-console
+    runtime: python
+    plan: free
+    buildCommand: pip install .
+    startCommand: python web/server.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.14"
+      # Set these in the Render dashboard — never commit them.
+      - key: LIVEKIT_URL
+        sync: false
+      - key: LIVEKIT_API_KEY
+        sync: false
+      - key: LIVEKIT_API_SECRET
+        sync: false
+      - key: OPIK_API_KEY
+        sync: false
+      - key: OPIK_WORKSPACE
+        sync: false
+      - key: OPIK_PROJECT_NAME
+        sync: false
+      - key: AGENT_NAME
+        value: healthcare-outbound-caller

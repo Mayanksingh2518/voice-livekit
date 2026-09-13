@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How it works · Care Outreach Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root{
+  --ground:#F6F8F9; --surface:#FFFFFF; --surface-2:#EDF2F4;
+  --ink:#0F1A20; --ink-2:#4A5A64; --ink-3:#78888F;
+  --line:#D8E1E5; --line-strong:#B9C7CD;
+  --accent:#0B6E78; --accent-soft:#DFEFF0;
+  --clinical:#A0472A; --clinical-soft:#F7E8E1;
+  --ok:#2C6A4E; --ok-soft:#E2F0E8;
+  --display:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
+  --body:"Source Serif 4",Georgia,serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --measure:66ch;
+}
+@media (prefers-color-scheme:dark){:root{
+  --ground:#0B1216; --surface:#121C21; --surface-2:#18242A;
+  --ink:#DCE7EB; --ink-2:#9BABB4; --ink-3:#6D7E87;
+  --line:#22323A; --line-strong:#33454E;
+  --accent:#4BBDC6; --accent-soft:#10333A;
+  --clinical:#E39670; --clinical-soft:#32211A;
+  --ok:#74C49A; --ok-soft:#11291F;
+}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);
+  font-size:1.0625rem;line-height:1.62;-webkit-font-smoothing:antialiased}
+.nav{border-bottom:1px solid var(--line);background:var(--surface)}
+.nav-inner{max-width:880px;margin:0 auto;padding:14px 24px;display:flex;gap:22px;align-items:center}
+.nav a{font-family:var(--mono);font-size:.82rem;text-decoration:none;color:var(--ink-3);
+  padding-bottom:2px;border-bottom:2px solid transparent}
+.nav a:hover{color:var(--ink-2)}
+.nav a.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:700}
+.wrap{max-width:880px;margin:0 auto;padding-inline:24px;padding-block:0 90px}
+
+.masthead{border-bottom:2px solid var(--ink);padding-block:52px 20px;
+  display:flex;flex-direction:column;gap:16px}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--accent);font-weight:700}
+h1{font-family:var(--display);font-weight:700;font-size:2.6rem;line-height:1.04;
+  letter-spacing:-.022em;margin:0;text-wrap:balance}
+.standfirst{margin:0;max-width:var(--measure);font-size:1.19rem;color:var(--ink-2)}
+.standfirst strong{color:var(--ink);font-weight:600}
+
+section{padding-block:44px 0}
+section > * + *{margin-top:18px}
+h2{font-family:var(--display);font-weight:600;font-size:1.85rem;letter-spacing:-.018em;
+  line-height:1.16;margin:0;text-wrap:balance;padding-bottom:10px;
+  border-bottom:1px solid var(--line-strong)}
+h3{font-family:var(--display);font-weight:600;font-size:1.28rem;letter-spacing:-.012em;
+  margin:0;text-wrap:balance}
+p{margin:0;max-width:var(--measure)}
+code{font-family:var(--mono);font-size:.85em;background:var(--surface-2);
+  border:1px solid var(--line);border-radius:2px;padding:1px 5px;overflow-wrap:break-word}
+a{color:var(--accent)}
+
+figure{margin:0;background:var(--surface);border:1px solid var(--line);
+  padding:24px 22px 18px;border-radius:4px}
+figure svg{display:block;max-width:100%;height:auto;margin-inline:auto;color:var(--ink-2)}
+figcaption{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);
+  font-size:.92rem;color:var(--ink-2);max-width:var(--measure)}
+figcaption b{color:var(--ink);font-weight:600}
+
+.stages{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--line)}
+.stage{display:grid;grid-template-columns:130px 1fr;gap:20px;padding-block:17px;
+  border-bottom:1px solid var(--line);align-items:start}
+.stage .name{font-family:var(--mono);font-size:.78rem;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--accent);padding-top:3px}
+.stage .body{font-size:.98rem;color:var(--ink-2);max-width:var(--measure)}
+.stage .body b{color:var(--ink);font-weight:600}
+.stage .body .file{font-family:var(--mono);font-size:.8rem;color:var(--ink-3);
+  display:block;margin-top:5px}
+
+.callout{background:var(--surface);border:1px solid var(--line);
+  border-left:3px solid var(--accent);padding:18px 22px;
+  display:flex;flex-direction:column;gap:10px}
+.callout .tag{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--accent);font-weight:700}
+.callout p{font-size:.98rem;color:var(--ink-2)}
+.callout p.punch{color:var(--ink);border-top:1px solid var(--line);padding-top:11px}
+.callout p.punch b{font-family:var(--display);font-weight:600}
+
+.tablescroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:500px;font-size:.95rem}
+th{text-align:left;font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-3);font-weight:700;
+  border-bottom:1px solid var(--line-strong);padding:0 16px 9px 0;vertical-align:bottom}
+td{border-bottom:1px solid var(--line);padding:11px 16px 11px 0;
+  vertical-align:top;color:var(--ink-2)}
+td:last-child,th:last-child{padding-right:0}
+td.key{font-family:var(--mono);font-size:.82rem;color:var(--ink);white-space:nowrap}
+tr:last-child td{border-bottom:none}
+
+.pill{display:inline-block;font-family:var(--mono);font-size:.7rem;font-weight:700;
+  padding:2px 8px;border-radius:2px;white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.warn{background:var(--clinical-soft);color:var(--clinical)}
+
+ul.prose{margin:0;padding-left:0;list-style:none;max-width:var(--measure);
+  display:flex;flex-direction:column;gap:11px}
+ul.prose > li{padding-left:20px;position:relative}
+ul.prose > li::before{content:"";position:absolute;left:0;top:.66em;
+  width:7px;height:1px;background:var(--accent)}
+ul.prose b{font-weight:600;color:var(--ink)}
+
+@media (max-width:620px){
+  h1{font-size:2rem} h2{font-size:1.5rem}
+  .stage{grid-template-columns:1fr;gap:6px}
+}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a href="/">Console</a>
+  <a href="/overview" class="on">How it works</a>
+</div></nav>
+<div class="wrap">
+
+<header class="masthead">
+  <div class="eyebrow">System overview</div>
+  <h1>Care Call Pipeline</h1>
+  <p class="standfirst">How one outbound healthcare call travels from a patient record to a
+    scored trace: who dials, what the agent is allowed to say, where the booking becomes a fact,
+    and how <strong>every call ends up auditable in Opik</strong>.</p>
+</header>
+
+<!-- ============================================================= -->
+<section id="flow">
+  <h2>The path of one call</h2>
+  <p>Six stages. The interesting part is what moves between them — in particular that the tool
+    record travels separately from the transcript, and outranks it at the end.</p>
+
+  <figure>
+    <svg viewBox="0 0 760 660" role="img"
+         aria-label="Six-stage pipeline: dispatch, connect, converse, end, analyse, observe. The tool record travels alongside the transcript and overrules it during analysis.">
+      <defs>
+        <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5"
+                markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+        </marker>
+        <marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5"
+                markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/>
+        </marker>
+      </defs>
+
+      <!-- stage 1 -->
+      <rect x="30" y="24" width="250" height="54" rx="3" fill="var(--surface-2)"
+            stroke="currentColor" stroke-width="1"/>
+      <text x="46" y="46" font-family="var(--mono)" font-size="13" font-weight="700"
+            fill="var(--ink)">1 · Dispatch</text>
+      <text x="46" y="65" font-size="12" fill="currentColor">patient record → room + agent</text>
+      <text x="300" y="46" font-size="12" fill="currentColor">consent gate runs here —</text>
+      <text x="300" y="63" font-size="12" fill="currentColor">a blocked patient never reaches a worker</text>
+
+      <line x1="155" y1="78" x2="155" y2="116" stroke="currentColor" marker-end="url(#ar)"/>
+
+      <!-- stage 2 -->
+      <rect x="30" y="118" width="250" height="54" rx="3" fill="var(--surface-2)"
+            stroke="currentColor" stroke-width="1"/>
+      <text x="46" y="140" font-family="var(--mono)" font-size="13" font-weight="700"
+            fill="var(--ink)">2 · Connect</text>
+      <text x="46" y="159" font-size="12" fill="currentColor">SIP dial, or browser joins</text>
+      <text x="300" y="140" font-size="12" fill="currentColor">486 / 408 / 5xx each become</text>
+      <text x="300" y="157" font-size="12" fill="currentColor">a distinct recorded outcome</text>
+
+      <line x1="155" y1="172" x2="155" y2="210" stroke="currentColor" marker-end="url(#ar)"/>
+
+      <!-- stage 3 -->
+      <rect x="30" y="212" width="250" height="70" rx="3" fill="var(--surface-2)"
+            stroke="currentColor" stroke-width="1"/>
+      <text x="46" y="234" font-family="var(--mono)" font-size="13" font-weight="700"
+            fill="var(--ink)">3 · Converse</text>
+      <text x="46" y="253" font-size="12" fill="currentColor">verify identity → results →</text>
+      <text x="46" y="270" font-size="12" fill="currentColor">check availability → book</text>
+      <text x="300" y="240" font-size="12" fill="currentColor">every tool call is written to</text>
+      <text x="300" y="257" font-size="12" font-family="var(--mono)" fill="var(--accent)">CallState</text>
+      <text x="300" y="274" font-size="12" fill="currentColor">as it happens</text>
+
+      <!-- the two streams diverge here -->
+      <line x1="110" y1="282" x2="110" y2="336" stroke="currentColor" marker-end="url(#ar)"/>
+      <text x="60" y="312" font-size="11" fill="currentColor" text-anchor="end">transcript</text>
+      <path d="M230,282 L230,300 Q230,308 240,308 L560,308 Q570,308 570,318 L570,470"
+            fill="none" stroke="var(--accent)" stroke-width="1.5" marker-end="url(#ar-a)"/>
+      <text x="410" y="300" font-size="11" fill="var(--accent)" font-weight="700"
+            text-anchor="middle">tool record travels separately</text>
+
+      <!-- stage 4 -->
+      <rect x="30" y="338" width="250" height="54" rx="3" fill="var(--surface-2)"
+            stroke="currentColor" stroke-width="1"/>
+      <text x="46" y="360" font-family="var(--mono)" font-size="13" font-weight="700"
+            fill="var(--ink)">4 · End</text>
+      <text x="46" y="379" font-size="12" fill="currentColor">hangup · patient leaves · timeout</text>
+
+      <line x1="155" y1="392" x2="155" y2="430" stroke="currentColor" marker-end="url(#ar)"/>
+
+      <!-- stage 5 -->
+      <rect x="30" y="432" width="250" height="70" rx="3" fill="var(--surface-2)"
+            stroke="currentColor" stroke-width="1"/>
+      <text x="46" y="454" font-family="var(--mono)" font-size="13" font-weight="700"
+            fill="var(--ink)">5 · Analyse</text>
+      <text x="46" y="473" font-size="12" fill="currentColor">LLM reads the transcript</text>
+      <text x="46" y="490" font-size="12" fill="currentColor">and forms a judgement</text>
+      <text x="300" y="486" font-size="12" font-weight="700" fill="var(--accent)">then the tool record overrules it</text>
+
+      <line x1="155" y1="502" x2="155" y2="540" stroke="currentColor" marker-end="url(#ar)"/>
+      <text x="168" y="526" font-size="11" fill="currentColor">reconciled outcome</text>
+
+      <!-- stage 6 -->
+      <rect x="30" y="542" width="250" height="70" rx="3" fill="var(--accent-soft)"
+            stroke="var(--accent)" stroke-width="1.5"/>
+      <text x="46" y="564" font-family="var(--mono)" font-size="13" font-weight="700"
+            fill="var(--accent)">6 · Observe</text>
+      <text x="46" y="583" font-size="12" fill="currentColor">turn traces + call trace</text>
+      <text x="46" y="600" font-size="12" fill="currentColor">+ audio + scores → Opik</text>
+      <text x="300" y="574" font-size="12" fill="currentColor">online rules score the trace</text>
+      <text x="300" y="591" font-size="12" fill="currentColor">on Opik's own servers</text>
+    </svg>
+    <figcaption><b>The tool record is the spine.</b> The transcript is what was said; the tool
+      record is what actually happened. They are collected independently and meet only at stage 5,
+      where the deterministic record wins any disagreement — so a model that narrates a booking it
+      never made cannot manufacture one.</figcaption>
+  </figure>
+</section>
+
+<!-- ============================================================= -->
+<section id="stages">
+  <h2>What each stage owns</h2>
+  <div class="stages">
+    <div class="stage">
+      <div class="name">Dispatch</div>
+      <div class="body">Loads the patient, checks consent and do-not-call, creates a room and
+        dispatches the agent into it. A refused patient is stopped before a worker exists at all.
+        <span class="file">scripts/dispatch_call.py · web/server.py · services/patients.py</span></div>
+    </div>
+    <div class="stage">
+      <div class="name">Connect</div>
+      <div class="body">Either <code>create_sip_participant</code> dials the patient's phone, or a
+        browser joins the room. The agent's behaviour is identical either way — only who arrives in
+        the room differs.
+        <span class="file">main.py</span></div>
+    </div>
+    <div class="stage">
+      <div class="name">Converse</div>
+      <div class="body">Identity is confirmed <b>before</b> any health data is spoken. Biomarkers are
+        read from the record, never recalled by the model. Requests for medical advice are refused;
+        urgent symptoms escalate. Six tools, each writing to the call record as it runs.
+        <span class="file">agent/patient_agent.py · agent/prompts.py</span></div>
+    </div>
+    <div class="stage">
+      <div class="name">End</div>
+      <div class="body">Hangup, the patient leaving, or the duration cap. Every ending — including
+        one nobody answered — produces a result worth logging.
+        <span class="file">main.py · services/call_state.py</span></div>
+    </div>
+    <div class="stage">
+      <div class="name">Analyse</div>
+      <div class="body">A structured-output model classifies the call, then reconciliation overwrites
+        anything the system knows for certain and records each correction. No transcript means no
+        LLM call at all.
+        <span class="file">analysis/post_call.py</span></div>
+    </div>
+    <div class="stage">
+      <div class="name">Observe</div>
+      <div class="body">Turn traces, a call trace, tool spans, the audio recording and the scores go
+        to Opik. Attaches to the session in one line and never raises into the call.
+        <span class="file">observability/opik_tracer.py</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<section id="opik">
+  <h2>How a call becomes a scored trace</h2>
+  <p>Opik has no "create thread" call — a thread <em>is</em> a set of traces sharing a
+    <code>thread_id</code>. That single fact decides the whole shape.</p>
+
+  <figure>
+    <svg viewBox="0 0 720 400" role="img"
+         aria-label="One call splits into N turn traces sharing a thread id, read by the thread-level rule, and one call trace carrying spans, audio and scores, read by the trace-level rule.">
+      <defs>
+        <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5"
+                markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+        </marker>
+      </defs>
+
+      <rect x="290" y="16" width="140" height="40" rx="3" fill="var(--surface-2)"
+            stroke="currentColor"/>
+      <text x="360" y="41" font-size="13" font-weight="700" text-anchor="middle"
+            fill="var(--ink)" font-family="var(--mono)">one call</text>
+
+      <path d="M330,56 L330,76 Q330,84 320,84 L180,84 Q170,84 170,94 L170,112"
+            fill="none" stroke="currentColor" marker-end="url(#ar2)"/>
+      <path d="M390,56 L390,76 Q390,84 400,84 L540,84 Q550,84 550,94 L550,112"
+            fill="none" stroke="currentColor" marker-end="url(#ar2)"/>
+
+      <!-- turn traces -->
+      <rect x="46" y="114" width="248" height="86" rx="3" fill="var(--surface-2)"
+            stroke="currentColor"/>
+      <text x="62" y="136" font-size="13" font-weight="700" fill="var(--ink)"
+            font-family="var(--mono)">N turn traces</text>
+      <text x="62" y="156" font-size="12" fill="currentColor">one per exchange</text>
+      <text x="62" y="174" font-size="12" fill="currentColor">sharing</text>
+      <text x="124" y="174" font-size="12" font-family="var(--mono)"
+            fill="var(--accent)">thread_id</text>
+      <text x="62" y="192" font-size="12" fill="currentColor">each with an llm span</text>
+
+      <!-- call trace -->
+      <rect x="426" y="114" width="248" height="86" rx="3" fill="var(--surface-2)"
+            stroke="currentColor"/>
+      <text x="442" y="136" font-size="13" font-weight="700" fill="var(--ink)"
+            font-family="var(--mono)">1 call trace</text>
+      <text x="442" y="156" font-size="12" fill="currentColor">variables · transcript · analysis</text>
+      <text x="442" y="174" font-size="12" fill="currentColor">tool spans · audio attachment</text>
+      <text x="442" y="192" font-size="12" fill="currentColor">feedback scores</text>
+
+      <line x1="170" y1="200" x2="170" y2="250" stroke="currentColor" marker-end="url(#ar2)"/>
+      <line x1="550" y1="200" x2="550" y2="250" stroke="currentColor" marker-end="url(#ar2)"/>
+
+      <!-- rules -->
+      <rect x="46" y="252" width="248" height="70" rx="3" fill="var(--accent-soft)"
+            stroke="var(--accent)" stroke-width="1.5"/>
+      <text x="62" y="274" font-size="12" font-weight="700" fill="var(--accent)"
+            font-family="var(--mono)">thread rule</text>
+      <text x="62" y="294" font-size="12" fill="currentColor">Booking Effectiveness</text>
+      <text x="62" y="311" font-size="11" fill="currentColor">sees the whole conversation</text>
+
+      <rect x="426" y="252" width="248" height="70" rx="3" fill="var(--accent-soft)"
+            stroke="var(--accent)" stroke-width="1.5"/>
+      <text x="442" y="274" font-size="12" font-weight="700" fill="var(--accent)"
+            font-family="var(--mono)">trace rule</text>
+      <text x="442" y="294" font-size="12" fill="currentColor">Medical Safety</text>
+      <text x="442" y="311" font-size="11" fill="currentColor">variables mapped into input</text>
+
+      <text x="360" y="364" font-size="12" text-anchor="middle" fill="currentColor">
+        the call trace sits outside the thread, so the chat view stays a clean transcript</text>
+    </svg>
+    <figcaption><b>Why not one fat trace.</b> Logging the call as a single trace with turns as spans
+      looks tidier and silently disqualifies it from every thread-level rule — those run across
+      sibling traces, never across child spans. Splitting the call this way is what makes both
+      evaluations possible at once.</figcaption>
+  </figure>
+</section>
+
+<!-- ============================================================= -->
+<section id="decisions">
+  <h2>Decisions worth defending</h2>
+
+  <div class="callout">
+    <div class="tag">The observability module</div>
+    <p>Opik attaches through LiveKit's own session events and a shutdown callback, so the core
+      application changes by exactly one line. The module imports nothing from the app — it takes a
+      session-shaped object and one async callback.</p>
+    <p class="punch"><b>Fail-open:</b> collection runs whether or not Opik is configured. Turning
+      telemetry off changes only where data goes, never whether the post-call analysis runs. A voice
+      agent must not drop a patient because telemetry broke — and
+      <code>OPIK_ENABLED=false</code> proves it.</p>
+  </div>
+
+  <div class="callout" style="margin-top:18px">
+    <div class="tag">Manual SDK over the OpenTelemetry integration</div>
+    <p>Opik ships a LiveKit integration, but it is OTel-based: it auto-captures LLM and TTS spans
+      and then cannot set a <code>thread_id</code>, cannot carry an audio attachment, and has
+      nowhere to put post-call analysis.</p>
+    <p class="punch"><b>So:</b> hand-built tracing in one module. A considered choice, not an
+      unawareness of the integration.</p>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<section id="stack">
+  <h2>What runs where</h2>
+  <div class="tablescroll">
+    <table>
+      <thead><tr><th style="width:30%">Piece</th><th>Role</th></tr></thead>
+      <tbody>
+        <tr><td class="key">LiveKit</td><td>Rooms, the agent runtime, and the SIP bridge. Does not
+          sell phone numbers — a trunk provider supplies those.</td></tr>
+        <tr><td class="key">Deepgram</td><td>Speech to text (nova-3) and text to speech (Aura).</td></tr>
+        <tr><td class="key">LLM</td><td>The agent's replies, the post-call analysis, and the judges —
+          Gemini or OpenAI behind one switch.</td></tr>
+        <tr><td class="key">Opik</td><td>Traces, threads, spans, attachments, feedback scores, and
+          the server-side evaluation rules.</td></tr>
+        <tr><td class="key">Web console</td><td>Starts a call in the browser, streams the transcript,
+          and shows the analysis — reading it back out of Opik rather than keeping its own copy.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<section id="status">
+  <h2>Verified end to end</h2>
+  <p>Each of these was confirmed by running it, not by reading the code.</p>
+  <div class="tablescroll">
+    <table>
+      <tbody>
+        <tr><td class="key">Real voice conversation</td><td><span class="pill ok">verified</span>
+          browser mic → Deepgram → LLM → Aura, with live transcript</td></tr>
+        <tr><td class="key">Tool calls</td><td><span class="pill ok">verified</span>
+          identity check, availability, booking — captured as spans</td></tr>
+        <tr><td class="key">Post-call analysis</td><td><span class="pill ok">verified</span>
+          structured output, with reconciliation corrections recorded</td></tr>
+        <tr><td class="key">Audio recording</td><td><span class="pill ok">verified</span>
+          recorded in-process and attached to the Opik trace</td></tr>
+        <tr><td class="key">Online evaluation</td><td><span class="pill ok">verified</span>
+          two rules firing on Opik's servers, plus in-process judge scores</td></tr>
+        <tr><td class="key">Fail-open telemetry</td><td><span class="pill ok">verified</span>
+          the call completes untouched with Opik disabled</td></tr>
+        <tr><td class="key">Live PSTN call</td><td><span class="pill warn">carrier</span>
+          the code is complete; both providers' free tiers block outbound SIP to India</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ul class="prose" style="margin-top:22px">
+    <li><b>Twilio trial</b> blocks Elastic SIP Trunking, the inline <code>Twiml</code> parameter, and
+      <code>&lt;Dial&gt;&lt;Sip&gt;</code> — the last one silently. Adding a <code>&lt;Say&gt;</code>
+      before the dial stretched the call from 5s to 11s, proving the markup executed while the SIP
+      leg never formed.</li>
+    <li><b>Telnyx trial</b> permits SIP trunking and issues a free number, then refuses India as a
+      destination: <em>"You must upgrade your account in order to use the following countries: IN."</em></li>
+    <li>Neither is a limit of the agent. <code>SIP_OUTBOUND_TRUNK_ID</code> is the only thing
+      standing between this and a ringing phone.</li>
+  </ul>
+</section>
+
+</div>
+
+</body>
+</html>

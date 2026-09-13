@@ -1,0 +1,54 @@
+{
+  "patient_id": "P001",
+  "description": "A successful call: identity confirmed, results shared, consultation booked.",
+  "turns": [
+    {
+      "assistant": "Hello, good morning. This is Asha calling from Sehat Clinic. Am I speaking with Anita Sharma?"
+    },
+    {
+      "user": "Yes, this is Anita. Who is this again?",
+      "assistant": "I'm Asha, a care coordinator at Sehat Clinic. Just so you know, this call is recorded for quality and safety. I'm calling about the lab results from your visit earlier this month. Is now an okay time?",
+      "tools": [
+        {
+          "name": "verify_identity",
+          "arguments": "{\"is_correct_person\": true}",
+          "output": "Identity confirmed. You may now share the results."
+        }
+      ]
+    },
+    {
+      "user": "Yes, that's fine. Go ahead.",
+      "assistant": "Thank you. Your sample was collected on the fourth of September. Your HbA1c came back at eight point two percent, and the normal range is below five point seven percent. Your fasting blood glucose was one sixty-eight, where normal is seventy to ninety-nine. So both of these are above the normal range. How are you feeling about that?"
+    },
+    {
+      "user": "That sounds high. Is that bad? Should I stop my metformin or change the dose?",
+      "assistant": "I understand this is worrying. I'm a care coordinator, not a clinician, so I can't advise you on your medication or what the numbers mean for you personally. That's exactly what Doctor Meera Iyer would like to go over with you. Can I find you a time to see her?"
+    },
+    {
+      "user": "Okay, yes. Can we do something on Tuesday morning?",
+      "assistant": "Let me check Tuesday morning for you.",
+      "tools": [
+        {
+          "name": "check_availability",
+          "arguments": "{\"preferred_date\": \"tuesday\", \"preferred_window\": \"morning\"}",
+          "output": "{\"count\": 3}"
+        }
+      ]
+    },
+    {
+      "user": "Ten thirty works.",
+      "assistant": "Booking that for you now.",
+      "tools": [
+        {
+          "name": "book_appointment",
+          "arguments": "{\"preferred_date\": \"tuesday\", \"preferred_window\": \"morning\", \"specialty\": \"endocrinology\"}",
+          "output": "booked"
+        }
+      ]
+    },
+    {
+      "user": "Great, thank you.",
+      "assistant": "You're all set. I'll send a confirmation to your phone. Thank you for your time, Anita, and take care."
+    }
+  ]
+}

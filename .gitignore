@@ -1,0 +1,10 @@
+.env
+.venv/
+uv.lock
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.ogg
+*.wav
+.DS_Store
+.env.agent

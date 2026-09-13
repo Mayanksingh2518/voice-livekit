@@ -1,0 +1,86 @@
+[
+  {
+    "id": "P001",
+    "name": "Anita Sharma",
+    "phone_number": "+919876543210",
+    "preferred_language": "en",
+    "consent_to_call": true,
+    "do_not_call": false,
+    "care_program": "Diabetes Management",
+    "ordering_clinician": "Dr. Meera Iyer",
+    "biomarkers": [
+      {
+        "name": "HbA1c",
+        "value": 8.2,
+        "unit": "%",
+        "reference_range": "below 5.7%",
+        "status": "high",
+        "collected_on": "2026-09-04"
+      },
+      {
+        "name": "Fasting blood glucose",
+        "value": 168,
+        "unit": "mg/dL",
+        "reference_range": "70 to 99 mg/dL",
+        "status": "high",
+        "collected_on": "2026-09-04"
+      }
+    ]
+  },
+  {
+    "id": "P002",
+    "name": "Rohit Verma",
+    "phone_number": "+919812345678",
+    "preferred_language": "en",
+    "consent_to_call": true,
+    "do_not_call": false,
+    "care_program": "Prediabetes Screening",
+    "ordering_clinician": "Dr. Sanjay Rao",
+    "biomarkers": [
+      {
+        "name": "HbA1c",
+        "value": 6.1,
+        "unit": "%",
+        "reference_range": "below 5.7%",
+        "status": "borderline",
+        "collected_on": "2026-09-08"
+      },
+      {
+        "name": "Fasting blood glucose",
+        "value": 114,
+        "unit": "mg/dL",
+        "reference_range": "70 to 99 mg/dL",
+        "status": "borderline",
+        "collected_on": "2026-09-08"
+      }
+    ]
+  },
+  {
+    "id": "P003",
+    "name": "Fatima Khan",
+    "phone_number": "+919900112233",
+    "preferred_language": "en",
+    "consent_to_call": true,
+    "do_not_call": true,
+    "care_program": "Diabetes Management",
+    "ordering_clinician": "Dr. Meera Iyer",
+    "biomarkers": [
+      {
+        "name": "HbA1c",
+        "value": 9.4,
+        "unit": "%",
+        "reference_range": "below 5.7%",
+        "status": "high",
+        "collected_on": "2026-08-29"
+      },
+      {
+        "name": "Fasting blood glucose",
+        "value": 212,
+        "unit": "mg/dL",
+        "reference_range": "70 to 99 mg/dL",
+        "status": "high",
+        "collected_on": "2026-08-29"
+      }
+    ]
+  }
+]
