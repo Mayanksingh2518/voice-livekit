@@ -93,6 +93,56 @@ tracer.attach(session, ctx, finalise=build_summary)
 
 ---
 
+## Running it
+
+Three accounts, all free tier, no card required. Setup is verified by a script that calls every
+service rather than checking that keys are merely present.
+
+| Key | Where from | Covers |
+|---|---|---|
+| `LIVEKIT_*` | cloud.livekit.io → Settings → Keys | Rooms, agent runtime, SIP |
+| `GEMINI_API_KEY` | aistudio.google.com/apikey | Agent replies, post-call analysis, judges |
+| `DEEPGRAM_API_KEY` | console.deepgram.com | Speech to text *and* text to speech |
+| `OPIK_API_KEY` | comet.com/opik | Traces, threads, evaluations |
+
+### Local
+
+```bash
+uv venv --python 3.11 && uv sync --extra agent
+cp .env.example .env                        # fill in the four keys above
+uv run python main.py download-files        # VAD and turn-detector weights
+uv run python scripts/check_setup.py        # calls every service, names what is missing
+
+uv run python scripts/setup_opik_rules.py --provider-key
+uv run python scripts/setup_opik_rules.py   # creates the two online-evaluation rules
+
+uv run python main.py dev                   # the agent worker
+uv run python web/server.py                 # the console, on :8080
+```
+
+- **Demo without speaking or dialling:** `uv run python scripts/replay_call.py` pushes a scripted
+  conversation through the real post-call pipeline — analysis, reconciliation, Opik traces, tool
+  spans and scores. It also drives the Opik module from a fake session object with no LiveKit
+  runtime, which is the proof that the module is genuinely standalone.
+- **Prove the fail-open claim:** `OPIK_ENABLED=false uv run python scripts/replay_call.py` — the
+  analysis still completes, nothing is sent.
+- **Use headphones for a browser call.** On speakers the agent hears itself and starts replying to
+  its own voice.
+- **Tests:** `uv run --group dev pytest` — 34 tests over the scheduler (conflicts, alternatives,
+  closed days, relative dates, booking horizon) and the analysis reconciliation (the model claiming
+  a booking that did not happen, missing one that did, and every deterministic override).
+
+### Deployed
+
+- **Agent → LiveKit Cloud.** `lk agent create --secrets-file .env.agent`, then `lk agent deploy`
+  for later versions. A `Dockerfile` and `.python-version` are in the repository; model weights are
+  fetched at build time so the first call is not delayed.
+- **Console → Render.** Python 3, build `pip install .`, start `python web/server.py`, free
+  instance. Seven environment variables; the agent's speech stack is deliberately excluded so the
+  console stays inside a 512 MB instance.
+
+---
+
 ## Constraints encountered
 
 All three are account-tier limits of free services, not limits of the design. Each was diagnosed

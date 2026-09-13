@@ -266,6 +266,71 @@ ul.prose b{font-weight:600;color:var(--ink)}
   </ul>
 </section>
 
+
+<!-- ================================================== -->
+<section id="running">
+  <h2>Running it</h2>
+  <p>Three accounts, all free tier, no card required. Setup is verified by a script that calls
+    every service rather than checking that keys are merely present.</p>
+
+  <div class="tablescroll">
+    <table>
+      <caption>Credentials needed</caption>
+      <thead><tr><th style="width:32%">Key</th><th>Where from</th><th>Covers</th></tr></thead>
+      <tbody>
+        <tr><td class="key">LIVEKIT_*</td><td>cloud.livekit.io → Settings → Keys</td><td>Rooms, agent runtime, SIP</td></tr>
+        <tr><td class="key">GEMINI_API_KEY</td><td>aistudio.google.com/apikey</td><td>Agent replies, post-call analysis, judges</td></tr>
+        <tr><td class="key">DEEPGRAM_API_KEY</td><td>console.deepgram.com</td><td>Speech to text <em>and</em> text to speech</td></tr>
+        <tr><td class="key">OPIK_API_KEY</td><td>comet.com/opik</td><td>Traces, threads, evaluations</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 style="margin-top:26px">Local</h3>
+  <div class="tablescroll">
+    <table>
+      <tbody>
+        <tr><td class="key" style="white-space:normal;line-height:2">
+<code>uv venv --python 3.11 &amp;&amp; uv sync --extra agent</code><br>
+<code>cp .env.example .env</code> &nbsp;<span style="font-family:var(--body);color:var(--ink-3)">— fill in the four keys above</span><br>
+<code>uv run python main.py download-files</code> &nbsp;<span style="font-family:var(--body);color:var(--ink-3)">— VAD and turn-detector weights</span><br>
+<code>uv run python scripts/check_setup.py</code> &nbsp;<span style="font-family:var(--body);color:var(--ink-3)">— calls every service, names what is missing</span><br>
+<code>uv run python scripts/setup_opik_rules.py --provider-key &amp;&amp; uv run python scripts/setup_opik_rules.py</code><br>
+<code>uv run python main.py dev</code> &nbsp;<span style="font-family:var(--body);color:var(--ink-3)">— the agent worker</span><br>
+<code>uv run python web/server.py</code> &nbsp;<span style="font-family:var(--body);color:var(--ink-3)">— the console, on :8080</span>
+        </td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ul class="prose" style="margin-top:22px">
+    <li><b>Demo without speaking or dialling:</b> <code>uv run python scripts/replay_call.py</code>
+      pushes a scripted conversation through the real post-call pipeline — analysis,
+      reconciliation, Opik traces, tool spans and scores. It also drives the Opik module from a
+      fake session object with no LiveKit runtime, which is the proof that the module is genuinely
+      standalone.</li>
+    <li><b>Prove the fail-open claim:</b> <code>OPIK_ENABLED=false uv run python
+      scripts/replay_call.py</code> — the analysis still completes, nothing is sent.</li>
+    <li><b>Use headphones for a browser call.</b> On speakers the agent hears itself and starts
+      replying to its own voice.</li>
+    <li><b>Tests:</b> <code>uv run --group dev pytest</code> — 34 tests over the scheduler
+      (conflicts, alternatives, closed days, relative dates, booking horizon) and the analysis
+      reconciliation (the model claiming a booking that did not happen, missing one that did, and
+      every deterministic override).</li>
+  </ul>
+
+  <h3 style="margin-top:26px">Deployed</h3>
+  <ul class="prose">
+    <li><b>Agent → LiveKit Cloud.</b> <code>lk agent create --secrets-file .env.agent</code>, then
+      <code>lk agent deploy</code> for later versions. A <code>Dockerfile</code> and
+      <code>.python-version</code> are in the repository; model weights are fetched at build time
+      so the first call is not delayed.</li>
+    <li><b>Console → Render.</b> Python 3, build <code>pip install .</code>, start
+      <code>python web/server.py</code>, free instance. Seven environment variables; the agent's
+      speech stack is deliberately excluded so the console stays inside a 512 MB instance.</li>
+  </ul>
+</section>
+
 <!-- ================================================== -->
 <section id="constraints">
   <h2>Constraints encountered</h2>
