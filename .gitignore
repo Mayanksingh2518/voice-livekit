@@ -8,3 +8,6 @@ __pycache__/
 *.wav
 .DS_Store
 .env.agent
+voice_livekit.egg-info/
+build/
+dist/

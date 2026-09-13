@@ -18,7 +18,7 @@ ENV PYTHONUNBUFFERED=1 \
 
 # Dependencies first so that editing application code does not invalidate the layer.
 COPY pyproject.toml ./
-RUN pip install --upgrade pip && pip install .
+RUN pip install --upgrade pip && pip install ".[agent]"
 
 COPY main.py ./
 COPY agent/ ./agent/
